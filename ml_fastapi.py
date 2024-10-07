@@ -13,8 +13,8 @@ class EmailText(BaseModel):
 app = FastAPI()
 
 # Load the pre-trained model and vectorizer
-model: SVC = joblib.load('/Users/kushalbasaula/Documents/Individual Project/API AND ADDS-ON/finalized_model.pkl')
-vectorizer: TfidfVectorizer = joblib.load('/Users/kushalbasaula/Documents/Individual Project/API AND ADDS-ON//transform.pkl')
+model: SVC = joblib.load('finalized_model.pkl')
+vectorizer: TfidfVectorizer = joblib.load('transform.pkl')
 
 @app.post("/predict/")
 async def predict(email: EmailText):
