@@ -27,18 +27,31 @@ async def predict(email: EmailText):
         
         # Predict using the SVC model
         prediction = model.predict(dense_input)
+
+        # Get confidence scores using predict_proba
+        confidence_scores = model.predict_proba(dense_input)
+
+        # Debug: Print raw confidence scores
+        print("Raw confidence scores:", confidence_scores)
+
+        # Ensure confidence score is between 0 and 1
+        confidence_score = float(confidence_scores[0][1])  # Probability of being spam (class 1)
         
-        # Get confidence scores
-        confidence_score = model.decision_function(dense_input)
-        
+        # Log confidence score for debugging
+        print("Confidence score (spam):", confidence_score)
+
+        if confidence_score < 0 or confidence_score > 1:
+            raise ValueError(f"Confidence score out of bounds: {confidence_score}")
+
         # Prepare the response
         result = {
             "prediction": "spam" if prediction[0] == 1 else "ham",
-            "confidence_score": float(confidence_score[0])  # Convert to float for JSON serialization
+            "confidence_score": confidence_score  # Keep confidence score between 0-1
         }
         return result
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
+
 
 # Include a root endpoint for simple health check
 @app.get("/")
