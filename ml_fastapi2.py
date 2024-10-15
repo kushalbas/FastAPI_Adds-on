@@ -17,7 +17,7 @@ model: MultinomialNB = joblib.load('lightweight.pkl')
 vectorizer: TfidfVectorizer = joblib.load('ntransform.pkl')
 
 # Custom threshold (already defined)
-THRESHOLD = 0.50
+THRESHOLD = 0.4942565241100008
 
 @app.post("/predict/")
 async def predict(email: EmailText):
@@ -32,7 +32,7 @@ async def predict(email: EmailText):
         confidence_scores = model.predict_proba(dense_input)
 
         # Custom prediction logic based on the threshold
-        prediction = 0 if confidence_scores[0][1] >= THRESHOLD else 1  # 1 for spam, 0 for ham
+        prediction = 1 if confidence_scores[0][1] >= THRESHOLD else 0  # 1 for spam, 0 for ham
 
         # Prepare the response
         result = {
