@@ -17,7 +17,7 @@ model: MultinomialNB = joblib.load('lightweight.pkl')
 vectorizer: TfidfVectorizer = joblib.load('ntransform.pkl')
 
 # Custom threshold (already defined)
-THRESHOLD = 0.4942565241100008
+THRESHOLD = 60
 
 @app.post("/predict/")
 async def predict(email: EmailText):
