@@ -21,11 +21,11 @@ class EmailText(BaseModel):
 app = FastAPI()
 
 # Load the pre-trained model and vectorizer
-model: SVC = joblib.load('finalized_model-2.pkl')
-vectorizer: TfidfVectorizer = joblib.load('transform-2.pkl')
+model: SVC = joblib.load('Trained_model.pkl')
+vectorizer: TfidfVectorizer = joblib.load('transform.pkl')
 
-# Custom threshold
-THRESHOLD =  0.702635265549673  # Set your custom threshold here
+# Custom threshold (already defined)
+THRESHOLD = 0.5856319934385817
 
 @app.post("/predict/")
 async def predict(email: EmailText):
@@ -51,8 +51,7 @@ async def predict(email: EmailText):
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
-
-# Include a root endpoint for simple health check
+# Root endpoint for health check
 @app.get("/")
 async def read_root():
     return {"message": "Hello, this is the spam/ham classification API"}
