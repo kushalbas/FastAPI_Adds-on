@@ -1,9 +1,0 @@
-fastapi
-gunicorn
-pydantic
-pickle5
-scikit-learn
-numpy
-uvicorn
-joblib
-
