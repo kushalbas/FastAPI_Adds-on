@@ -16,6 +16,9 @@ app = FastAPI()
 model: MultinomialNB = joblib.load('lightweight.pkl')
 vectorizer: TfidfVectorizer = joblib.load('ntransform.pkl')
 
+# Custom threshold (already defined)
+THRESHOLD = 0.50
+
 @app.post("/predict/")
 async def predict(email: EmailText):
     try:
@@ -25,19 +28,16 @@ async def predict(email: EmailText):
         # Convert sparse matrix to dense array
         dense_input = vectorized_text.toarray()
         
-        # Predict using the SVC model
-        prediction = model.predict(dense_input)
-
         # Get confidence scores using predict_proba
         confidence_scores = model.predict_proba(dense_input)
 
-        # Debug: Print raw confidence score to verify it's between 0 and 1
-        print("Raw confidence score:", confidence_scores[0][1])
+        # Custom prediction logic based on the threshold
+        prediction = 1 if confidence_scores[0][1] >= THRESHOLD else 0  # 1 for spam, 0 for ham
 
         # Prepare the response
         result = {
-            "prediction": "spam" if prediction[0] == 1 else "ham",
-            "confidence_score": float(confidence_scores[0][1])  # Keep confidence score between 0-1
+            "prediction": "spam" if prediction == 1 else "ham",
+            "confidence_score": float(confidence_scores[0][1])  # Score for spam class
         }
         return result
     except Exception as e:
