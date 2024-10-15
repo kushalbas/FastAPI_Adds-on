@@ -1,6 +1,8 @@
 fastapi
-uvicorn
+gunicorn
 pydantic
 pickle5
 scikit-learn
 numpy
+uvicorn
+joblib
