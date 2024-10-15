@@ -1,11 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Tue Oct 15 14:16:57 2024
-
-@author: kushalbasaula
-"""
-
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from sklearn.svm import SVC
@@ -24,9 +16,6 @@ app = FastAPI()
 model: SVC = joblib.load('Trained_model.pkl')
 vectorizer: TfidfVectorizer = joblib.load('transform.pkl')
 
-# Custom threshold (already defined)
-THRESHOLD = 0.5856319934385817
-
 @app.post("/predict/")
 async def predict(email: EmailText):
     try:
@@ -36,22 +25,26 @@ async def predict(email: EmailText):
         # Convert sparse matrix to dense array
         dense_input = vectorized_text.toarray()
         
+        # Predict using the SVC model
+        prediction = model.predict(dense_input)
+
         # Get confidence scores using predict_proba
         confidence_scores = model.predict_proba(dense_input)
 
-        # Custom prediction logic based on the threshold
-        prediction = 1 if confidence_scores[0][1] >= THRESHOLD else 0  # 1 for spam, 0 for ham
+        # Debug: Print raw confidence score to verify it's between 0 and 1
+        print("Raw confidence score:", confidence_scores[0][1])
 
         # Prepare the response
         result = {
-            "prediction": "spam" if prediction == 1 else "ham",
-            "confidence_score": float(confidence_scores[0][1])  # Score for spam class
+            "prediction": "spam" if prediction[0] == 1 else "ham",
+            "confidence_score": float(confidence_scores[0][1])  # Keep confidence score between 0-1
         }
         return result
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
-# Root endpoint for health check
+
+# Include a root endpoint for simple health check
 @app.get("/")
 async def read_root():
     return {"message": "Hello, this is the spam/ham classification API"}
