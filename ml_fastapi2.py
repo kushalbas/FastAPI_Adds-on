@@ -32,7 +32,7 @@ async def predict(email: EmailText):
         confidence_scores = model.predict_proba(dense_input)
 
         # Custom prediction logic based on the threshold
-        prediction = 0 if confidence_scores[0][1] >= THRESHOLD else 0  # 1 for spam, 0 for ham
+        prediction = 0 if confidence_scores[0][1] >= THRESHOLD else 1  # 1 for spam, 0 for ham
 
         # Prepare the response
         result = {
