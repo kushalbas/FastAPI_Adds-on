@@ -21,8 +21,8 @@ class EmailText(BaseModel):
 app = FastAPI()
 
 # Load the pre-trained model and vectorizer
-model: SVC = joblib.load('/Users/kushalbasaula/Documents/Individual Project/final/Trained_model.pkl')
-vectorizer: TfidfVectorizer = joblib.load('/Users/kushalbasaula/Documents/Individual Project/final/transform.pkl')
+model: SVC = joblib.load('Trained_model.pkl')
+vectorizer: TfidfVectorizer = joblib.load('transform.pkl')
 
 # Custom threshold (already defined)
 THRESHOLD = 0.5856319934385817
