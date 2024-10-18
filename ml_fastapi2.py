@@ -16,9 +16,6 @@ app = FastAPI()
 model: MultinomialNB = joblib.load('lightweight.pkl')
 vectorizer: TfidfVectorizer = joblib.load('ntransform.pkl')
 
-# Custom threshold (already defined)
-THRESHOLD = 0.4942565241100008
-
 @app.post("/predict/")
 async def predict(email: EmailText):
     try:
@@ -31,8 +28,8 @@ async def predict(email: EmailText):
         # Get confidence scores using predict_proba
         confidence_scores = model.predict_proba(dense_input)
 
-        # Custom prediction logic based on the threshold
-        prediction = 1 if confidence_scores[0][1] >= THRESHOLD else 0  # 1 for spam, 0 for ham
+        # Model prediction (1 for spam, 0 for ham) based on maximum probability
+        prediction = np.argmax(confidence_scores[0])  # Get the class with the highest probability
 
         # Prepare the response
         result = {
