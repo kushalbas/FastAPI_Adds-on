@@ -34,12 +34,11 @@ async def predict(email: EmailText):
         # Prepare the response
         result = {
             "prediction": "spam" if prediction == 1 else "ham",
-            "confidence_score": float(confidence_scores[0][1])  # Score for spam class
+            "confidence_score": float(confidence_scores[0][prediction])  # Score for predicted class
         }
         return result
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
-
 
 # Include a root endpoint for simple health check
 @app.get("/")
