@@ -1,6 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-from sklearn.naive_bayes import MultinomialNB
+from sklearn.neural_network import MLPClassifier
 from sklearn.feature_extraction.text import TfidfVectorizer
 import joblib
 import numpy as np
@@ -13,8 +13,8 @@ class EmailText(BaseModel):
 app = FastAPI()
 
 # Load the pre-trained model and vectorizer
-model: MultinomialNB = joblib.load('lightweight.pkl')
-vectorizer: TfidfVectorizer = joblib.load('ntransform.pkl')
+model: MultinomialNB = joblib.load('mlpTrained_model.pkl')
+vectorizer: TfidfVectorizer = joblib.load('mlptransform.pkl')
 
 @app.post("/predict/")
 async def predict(email: EmailText):
