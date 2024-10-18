@@ -13,7 +13,7 @@ class EmailText(BaseModel):
 app = FastAPI()
 
 # Load the pre-trained model and vectorizer
-model: MultinomialNB = joblib.load('mlpTrained_model.pkl')
+model: MLPClassifier= joblib.load('mlpTrained_model.pkl')
 vectorizer: TfidfVectorizer = joblib.load('mlptransform.pkl')
 
 @app.post("/predict/")
